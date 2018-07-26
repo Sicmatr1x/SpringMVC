@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+ 	<!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+	<h1>player</h1>
+    <h2>add</h2>
+	<form id="player">
+		<label>Name:</label><input type="text" name="name"><br>
+		<label>Age:</label><input type="text" name="age"><br>
+		<label>Sex:</label><input type="text" name="sex"><br>
+		<input type="button" name="add" id="add" value="submit"><br><span id="add-info-span"></span>
+	</form>
+    
+	<h2>search</h2>
+	<label>Id:</label><input type="text" name="name" id="showPlayerId"><br>
+	<label>Name:</label><p id="showPlayerName"></p>
+	<label>Age:</label><p id="showPlayerAge"></p>
+	<label>Sex:</label><p id="showPlayerSex"></p>
+	<button id="show">search</button><span id="show-info-span"></span>
+    
+    <h2>delete</h2>
+    <button id="delete">delete</button><span id="delete-info-span"></span>
+    
+    <h2>update</h2>
+    <form id="player-update">
+        <label>Id:</label><input type="text" name="id"><br>
+		<label>Name:</label><input type="text" name="name"><br>
+		<label>Age:</label><input type="text" name="age"><br>
+		<label>Sex:</label><input type="text" name="sex"><br>
+		<input type="button" name="update" id="update" value="update"><br><span id="update-info-span"></span>
+	</form>
+</body>
+<script>
+$(document).ready(function(){
+	
+	$("#player input[name=add]").click(function() {
+		$("#add-info-span").val("");
+        let name = $("#player input[name=name]").val();
+        let age = $("#player input[name=age]").val();
+        let sex = $("#player input[name=sex]").val();
+        console.log(name+","+age+","+sex);
+		$.ajax({
+            url : "/SpringMVC/basketball/player",
+            type : "post",
+            data : {
+            	name:$("#player input[name=name]").val(),
+            	age:$("#player input[name=age]").val(),
+            	sex:$("#player input[name=sex]").val()
+            },  
+            dataType : "json",
+            success : function(data) {
+            	console.log(data);
+            	if(data.state === "success"){
+            		$("#add-info-span").text(data.state);
+            	}
+				if(data.state === "fail"){
+					$("#add-info-span").text(data.info);
+            	}
+				console.log("data=" + data);
+            },
+            error : function() {
+            	$("#add-info-span").text("ajax请求失败");
+            	console.log("ajax请求失败");
+            }
+        });//end ajax
+
+    });
+        
+	$("#show").click(function() {
+		$("#show-info-span").val("");
+		$.ajax({
+            url : "/SpringMVC/basketball/player/"+$("#showPlayerId").val(),
+            type : "get", 
+            dataType : "json",
+            success : function(data) {
+            	console.log(data);
+            	if(data.state === "success"){
+            		$("#show-info-span").text(data.state);
+                    $("#showPlayerName").text(data.result.player.name);
+                    $("#showPlayerAge").text(data.result.player.age);
+                    $("#showPlayerSex").text(data.result.player.sex);
+            	}
+				if(data.state === "fail"){
+					$("#show-info-span").text(data.info);
+            	}
+				console.log("data=" + data);
+            },
+            error : function() {
+            	$("#show-info-span").text("ajax请求失败");
+            	console.log("ajax请求失败");
+            }
+        });//end ajax
+
+    }); 
+    
+    $("#delete").click(function() {
+		$("#delete-info-span").val("");
+		$.ajax({
+            url : "/SpringMVC/basketball/player/"+$("#showPlayerId").val(),
+            type : "delete", 
+            dataType : "json",
+            success : function(data) {
+            	console.log(data);
+            	if(data.state === "success"){
+            		$("#delete-info-span").text(data.state);
+            	}
+				if(data.state === "fail"){
+					$("#delete-info-span").text(data.info);
+            	}
+				console.log("data=" + data);
+            },
+            error : function() {
+            	$("#delete-info-span").text("ajax请求失败");
+            	console.log("ajax请求失败");
+            }
+        });//end ajax
+
+    }); 
+    
+    
+    $("#player-update input[name=update]").click(function() {
+		$("#add-info-span").val("");
+		$.ajax({
+            url : "/SpringMVC/basketball/player/"+$("#player-update input[name=id]").val(),
+            type : "put",
+            data : {
+            	name:$("#player-update input[name=name]").val(),
+            	age:$("#player-update input[name=age]").val(),
+            	sex:$("#player-update input[name=sex]").val()
+            },  
+            dataType : "json",
+            success : function(data) {
+            	console.log(data);
+            	if(data.state === "success"){
+            		$("#update-info-span").text(data.state);
+            	}
+				if(data.state === "fail"){
+					$("#update-info-span").text(data.info);
+            	}
+				console.log("data=" + data);
+            },
+            error : function() {
+            	$("#update-info-span").text("ajax请求失败");
+            	console.log("ajax请求失败");
+            }
+        });//end ajax
+
+    });
+    
+    
+});
+</script>
+</html>

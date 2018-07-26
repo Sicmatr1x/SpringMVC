@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="/players/1234" method="post">
+		name:<input type="text" name="playerName"/><br>
+		age:<input type="text" name="playerAge"/><br>
+		sex:<input type="text" name="playerSex"/><br>
+		<input type="submit" name="playerName" value="submit"/><br>
+	</form>
+	
+	img:<img type="text" src="/FirstMVC/pic/img?imgPath=fate0301.jpg"/><br>
+	
+	<form action="/FirstMVC/upload/img" method="post"  enctype="multipart/form-data">
+		files:<input type="file" name="files"/><br>
+		<input type="submit" value="submit"/><br>
+	</form>
+</body>
+</html>
