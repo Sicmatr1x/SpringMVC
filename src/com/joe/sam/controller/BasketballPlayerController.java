@@ -72,4 +72,11 @@ public class BasketballPlayerController {
 		Info info = playerService.deletePlayer(id);
 		return info;
 	}
+	
+	@RequestMapping(value = "/player/{id}/login",method=RequestMethod.POST)
+	@ResponseBody
+	public Info login(@PathVariable String id, String password) {
+		Info info = playerService.login(id, password);
+		return info;
+	}
 }

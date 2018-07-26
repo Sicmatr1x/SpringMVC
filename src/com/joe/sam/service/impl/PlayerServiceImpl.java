@@ -16,8 +16,10 @@ public class PlayerServiceImpl implements IPlayerService {
 
 	@Override
 	public Info addPlayer(BasketballPlayer player) {
-		// TODO Auto-generated method stub
-		return playerDao.addPlayer(player);
+		System.out.println("PlayerServiceImpl:addPlayer:player="+player);
+		Info info = playerDao.addPlayer(player);
+		System.out.println("PlayerServiceImpl:addPlayer:info="+info);
+		return info;
 	}
 
 	@Override
@@ -36,6 +38,13 @@ public class PlayerServiceImpl implements IPlayerService {
 	public Info getPlayer(String id) {
 		// TODO Auto-generated method stub
 		return playerDao.getPlayer(id);
+	}
+
+	@Override
+	public Info login(String id, String password) {
+		
+		
+		return playerDao.login(id, password);
 	}
 
 }

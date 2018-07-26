@@ -8,4 +8,5 @@ public interface IPlayerDao {
 	public Info updatePlayer(BasketballPlayer player);
 	public Info deletePlayer(String id);
 	public Info getPlayer(String id);
+	public Info login(String id, String password);
 }

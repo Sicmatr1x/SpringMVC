@@ -4,18 +4,18 @@ public class BasketballPlayer {
 	private String id;
 	private String name;
 	private Integer age;
-	private String sex;
+	private String password;
 	public BasketballPlayer() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public BasketballPlayer(String id, String name, Integer age, String sex) {
+	public BasketballPlayer(String id, String name, Integer age, String password) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.age = age;
-		this.sex = sex;
+		this.password = password;
 	}
 
 	public String getId() {
@@ -38,16 +38,19 @@ public class BasketballPlayer {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-	public String getSex() {
-		return sex;
+	
+
+	public String getPassword() {
+		return password;
 	}
-	public void setSex(String sex) {
-		this.sex = sex;
+
+	public void setPassword(String password) {
+		this.password = password;
 	}
 
 	@Override
 	public String toString() {
-		return "BasketballPlayer [id=" + id + ", name=" + name + ", age=" + age + ", sex=" + sex + "]";
+		return "BasketballPlayer [id=" + id + ", name=" + name + ", age=" + age + ", password=" + password + "]";
 	}
 	
 	

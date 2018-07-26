@@ -14,7 +14,7 @@
 	<form id="player">
 		<label>Name:</label><input type="text" name="name"><br>
 		<label>Age:</label><input type="text" name="age"><br>
-		<label>Sex:</label><input type="text" name="sex"><br>
+		<label>password:</label><input type="text" name="password"><br>
 		<input type="button" name="add" id="add" value="submit"><br><span id="add-info-span"></span>
 	</form>
     
@@ -22,7 +22,7 @@
 	<label>Id:</label><input type="text" name="name" id="showPlayerId"><br>
 	<label>Name:</label><p id="showPlayerName"></p>
 	<label>Age:</label><p id="showPlayerAge"></p>
-	<label>Sex:</label><p id="showPlayerSex"></p>
+	<label>password:</label><p id="showPlayerPassword"></p>
 	<button id="show">search</button><span id="show-info-span"></span>
     
     <h2>delete</h2>
@@ -33,8 +33,15 @@
         <label>Id:</label><input type="text" name="id"><br>
 		<label>Name:</label><input type="text" name="name"><br>
 		<label>Age:</label><input type="text" name="age"><br>
-		<label>Sex:</label><input type="text" name="sex"><br>
+		<label>password:</label><input type="text" name="password"><br>
 		<input type="button" name="update" id="update" value="update"><br><span id="update-info-span"></span>
+	</form>
+	
+	<h2>login</h2>
+    <form id="player-login">
+        <label>Id:</label><input type="text" name="id"><br>
+		<label>password:</label><input type="text" name="password"><br>
+		<input type="button" name="login" id="login" value="login"><br><span id="login-info-span"></span>
 	</form>
 </body>
 <script>
@@ -44,15 +51,15 @@ $(document).ready(function(){
 		$("#add-info-span").val("");
         let name = $("#player input[name=name]").val();
         let age = $("#player input[name=age]").val();
-        let sex = $("#player input[name=sex]").val();
-        console.log(name+","+age+","+sex);
+        let password = $("#player input[name=password]").val();
+        console.log(name+","+age+","+password);
 		$.ajax({
             url : "/SpringMVC/basketball/player",
             type : "post",
             data : {
             	name:$("#player input[name=name]").val(),
             	age:$("#player input[name=age]").val(),
-            	sex:$("#player input[name=sex]").val()
+            	password:$("#player input[name=password]").val()
             },  
             dataType : "json",
             success : function(data) {
@@ -85,7 +92,7 @@ $(document).ready(function(){
             		$("#show-info-span").text(data.state);
                     $("#showPlayerName").text(data.result.player.name);
                     $("#showPlayerAge").text(data.result.player.age);
-                    $("#showPlayerSex").text(data.result.player.sex);
+                    $("#showPlayerPassword").text(data.result.player.password);
             	}
 				if(data.state === "fail"){
 					$("#show-info-span").text(data.info);
@@ -133,7 +140,7 @@ $(document).ready(function(){
             data : {
             	name:$("#player-update input[name=name]").val(),
             	age:$("#player-update input[name=age]").val(),
-            	sex:$("#player-update input[name=sex]").val()
+            	password:$("#player-update input[name=password]").val()
             },  
             dataType : "json",
             success : function(data) {
@@ -148,6 +155,32 @@ $(document).ready(function(){
             },
             error : function() {
             	$("#update-info-span").text("ajax请求失败");
+            	console.log("ajax请求失败");
+            }
+        });//end ajax
+
+    });
+    
+    $("#player-login input[name=login]").click(function() {
+		$.ajax({
+            url : "/SpringMVC/basketball/player/"+$("#player-login input[name=id]").val()+"/login",
+            type : "post",
+            data : {
+            	password:$("#player-login input[name=password]").val()
+            },  
+            dataType : "json",
+            success : function(data) {
+            	console.log(data);
+            	if(data.state === "success"){
+            		$("#login-info-span").text(data.state);
+            	}
+				if(data.state === "fail"){
+					$("#login-info-span").text(data.info);
+            	}
+				console.log("data=" + data);
+            },
+            error : function() {
+            	$("#login-info-span").text("ajax请求失败");
             	console.log("ajax请求失败");
             }
         });//end ajax

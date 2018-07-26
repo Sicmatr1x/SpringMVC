@@ -85,4 +85,25 @@ public class PlayerDaoImpl implements IPlayerDao {
 		return info;
 	}
 
+	@Override
+	public Info login(String id, String password) {
+		BasketballPlayer player = playerMap.get(id);
+		Info info = new Info();
+		if(player == null) {
+			info.setState("fail");
+			info.setInfo("can not find " + id + " in databases");
+		}else {
+			if(password != null && password.equals(player.getPassword())) {
+				info.setState("success");
+			}else {
+				info.setState("fail");
+				info.setInfo("" + id + " 's password is not correct");
+			}
+			
+			
+		}
+		info.getResult().put("player", player);
+		return info;
+	}
+
 }
