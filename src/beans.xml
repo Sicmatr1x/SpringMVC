@@ -17,5 +17,5 @@ http://www.springframework.org/schema/aop/spring-aop.xsd">
 
 	<aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
 	<context:annotation-config></context:annotation-config>
-	<context:component-scan base-package="com.joe.*"></context:component-scan>
+	<context:component-scan base-package="com.joe.sam.po"></context:component-scan>
 </beans>

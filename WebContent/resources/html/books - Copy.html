@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div id="app">
+        <table>
+            <tbody></tbody>
+        </table>
+        <div id="addForm">
+            <form>
+                <input type="text" name="bookName" />
+                <input type="text" name="bookAuthor" />
+                <input type="text" name="bookDate" />
+                <input type="submit" name="submit" value="add"/>
+            </form>
+        </div>
+    </div>
+</body>
+<script>
+    
+        function benAjax(url,method,data,callback){
+            let options={
+                "url":url,
+                "type":method,
+                "data":data
+            }
+            $.ajax(options).done(function(obj){
+                callback(obj);
+            });
+        }
+        
+        function form2json($form){
+            let obj = {};
+            $.each($form.children("[type!=submit]"),function(index,item){
+                let $item = $(item);
+                obj[$item.attr("name")]=$item.val();
+            });
+            /*form.children("[type!=submit]").each(function(index,item){
+                obj[item.attr("name")]=item.val();
+            });*/
+            return obj;
+        }
+    
+    //class
+    function BookComponent($view,url){
+        let tbody = $view.find("tbody");
+        renderTable = renderTable.bind(this);
+        bindAddForm = bindAddForm.bind(this);//this==BookComponent
+        
+        function renderTable(){
+            tbody.empty();
+            model.forEach((item,index)=>{
+                $("<tr>").append($("<td>").text(item.bookId)
+                                 .append($("<td>").text(item.bookName))
+                                 .append($("<td>").text(item.bookAuthor))
+                                 .append($("<button>").text(DELETE)).on("click",(event)=>{
+                                    this.delete();
+                                })
+                                 .appendTo(tbody)
+                                );
+            });
+        }
+        function bindAddForm(){
+            $("#addForm").on("submit",(event)=>{
+                console.log("bindAddForm()");
+                event.preventDefault();
+                let data = form2json($(event.target));
+                console.log(data);
+                benAjax(url,"POST",data,(dt)=>{
+                    console.log(data);
+                    //need to find book component
+                    this.add(dt);
+                });
+            });
+        }
+        
+        let model = null;
+        this.render = function(){
+            //model needed
+            renderTable();
+        }
+        this.init = function(){
+            //require the model
+            benAjax(url,"GET",null,function(data){
+                model=data;
+                //render
+                this.render();
+            })
+            
+            
+        }
+        this.render = function(){
+            renderTable();
+        }
+        this.add = function(book){
+            // add a book into model
+            model.push(book);
+            //render
+            this.render();
+        }
+        
+        this.delete = function(){
+            benAjax(url+book.id,"DELETE",null,data=>{
+                //remove the book from the model
+                let index = model.indexOf(book);
+                model.splice(index,1);
+                //render
+                this.render();
+            });
+        }
+        
+        function
+        this.update(){
+            
+        }
+    }
+    
+    let bookComponent = new BookComponent($("#app"),"http://localhost:9090/SpringMVC/books/");
+    
+</script>
+</html>

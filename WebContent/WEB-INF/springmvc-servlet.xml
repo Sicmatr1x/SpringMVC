@@ -22,7 +22,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 		/> -->
 
 	<aop:aspectj-autoproxy proxy-target-class="true"></aop:aspectj-autoproxy>
-
+<context:component-scan base-package="com.joe.sam.controller"></context:component-scan>
 	<!-- controllers -->
 	<mvc:annotation-driven enable-matrix-variables="true">
 		<mvc:message-converters>
@@ -32,7 +32,7 @@ http://www.springframework.org/schema/tx/spring-tx.xsd">
 		</mvc:message-converters>
 	</mvc:annotation-driven>
 
-	<context:component-scan base-package="com.joe.sam.*"></context:component-scan>
+	<context:component-scan base-package="com.joe.sam.controller"></context:component-scan>
 	<mvc:resources mapping="/resources/**" location="/resources/">
 		<mvc:cache-control max-age="3600" cache-public="true" />
 	</mvc:resources>

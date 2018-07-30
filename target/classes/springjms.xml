@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:tx="http://www.springframework.org/schema/tx"
-	xmlns:aop="http://www.springframework.org/schema/aop"
-	xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
@@ -13,46 +13,44 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd
         http://www.springframework.org/schema/tx
-        http://www.springframework.org/schema/tx/spring-tx.xsd">
-        
-        
-        
-    <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
-	<context:component-scan base-package="com.joe.sam.dao.impl,com.joe.sam.service.impl"></context:component-scan>
-	
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/websocket   
+        http://www.springframework.org/schema/websocket/spring-websocket.xsd ">
+
+
+
+	<aop:aspectj-autoproxy></aop:aspectj-autoproxy>
+	<context:component-scan base-package="com.ben.bms.dao,com.ben.bms.service"></context:component-scan>
+
+
+
 	<bean id="ds" class="org.apache.commons.dbcp.BasicDataSource">
 		<property name="driverClassName" value="oracle.jdbc.OracleDriver"></property>
-		<property name="url" value="jdbc:oracle:thin:@localhost:1521:xe"></property>
-		<property name="password" value="789456"></property>
-		<property name="username" value="joe"></property>
+		<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl"></property>
+		<property name="password" value="buaa1990"></property>
+		<property name="username" value="scott"></property>
 	</bean>
 
-		<!--
-		指定实现JPA的适配器，主要作用如下：
-		1、取代persistence.xml中的<provider>
-		2、指定方言
-		3、通知“entityManagerFactory”产生什么样的entityManager
-		4、还可以使用EclipseLinkJpaVendorAdapter(Toplink)，openJpaVendorAdapter
-	 -->
+	<!-- 指定实现JPA的适配器，主要作用如下： 1、取代persistence.xml中的<provider> 2、指定方言 3、通知“entityManagerFactory”产生什么样的entityManager 
+		4、还可以使用EclipseLinkJpaVendorAdapter(Toplink)，openJpaVendorAdapter -->
 	<bean id="hibernateJpaVendorAdapter"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
 		<property name="databasePlatform" value="org.hibernate.dialect.OracleDialect" />
 	</bean>
-	
-	
+
+
 	<!-- JPA实体管理工厂的配置 使用@PersistenceContext会自动注入EntityManager,可以使用 @PersistenceUnit注入entityManagerFactory -->
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="ds" />
 		<property name="persistenceUnitName" value="em"></property>
 		<property name="jpaVendorAdapter" ref="hibernateJpaVendorAdapter" />
-		<property name="packagesToScan" value="com.joe.sam.po" /><!--待扫描的实体类包，不再需要persistence.xml了 -->
+		<property name="packagesToScan" value="com.ben.bms.entity" /><!--待扫描的实体类包，不再需要persistence.xml了 -->
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.ejb.naming_strategy">org.hibernate.cfg.ImprovedNamingStrategy</prop>
 				<prop key="hibernate.show_sql">true</prop>
-				<prop key="hibernate.hbm2ddl.auto">update</prop>
-				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.hbm2ddl.auto">create</prop>
 			</props>
 		</property>
 	</bean>
@@ -71,6 +69,7 @@
 		proxy-target-class="true" />
 
 	<!-- spring jms -->
+
 	<!-- 真正可以产生Connection的ConnectionFactory，由对应的 JMS服务厂商提供 -->
 	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
 		<property name="brokerURL" value="failover://tcp://localhost:61616" />
@@ -97,17 +96,15 @@
 			<value>queue</value>
 		</constructor-arg>
 	</bean>
-	
 
 	<!-- 消息监听器 -->
-	<!-- <bean id="consumerMessageListener" class="com.ben.bms.jms.listener.ConsumerMessageListener" />-->
+	<bean id="consumerMessageListener" class="com.ben.bms.jms.listener.ConsumerMessageListener" />
 	<!-- 消息监听容器 -->
-	<!-- <bean id="jmsContainer"
+	<bean id="jmsContainer"
 		class="org.springframework.jms.listener.DefaultMessageListenerContainer"
 		>
 		<property name="connectionFactory" ref="connectionFactory" />
 		<property name="destination" ref="queueDestination" />
 		<property name="messageListener" ref="consumerMessageListener" />
-	</bean>-->
-
+	</bean>
 </beans>
