@@ -29,7 +29,7 @@
                 <input type="text" name="bookName" />
                 <input type="text" name="bookAuthor" />
                 <!-- <input type="text" name="bookDate" /> -->
-                <input type="submit" name="submit" value="update"/>
+                <input type="submit" name="submit" value="update" id="update-btn"/>
             </form>
         </div>
     </div>
@@ -121,14 +121,18 @@
                 }
                 
                 function bindUpdateForm(){
-                	$("#updateForm").on("submit",event=>{
-                        event.preventDefault();
+                	$("#updateForm").on("submit",even=>{
+                        even.preventDefault();
+                        //alert("bindUpdateForm()");
                         let data = form2json($(event.target));
-                        myAjax(url,"PUT",data,dt=>{
+                        console.log(data.bookId);
+                        myAjax(url+data.bookId,"PUT",data,dt=>{
                           //  data.id= parseInt(Math.random()*10000);
                             console.log("bindUpdateForm():"+data);
                             //need to find bookComponent
-                            this.update(dt);
+                            model.push(dt);
+                        	//this.render();
+                            renderTable();
                         });
                     });
                 }
@@ -138,6 +142,7 @@
                     //require the model 
                     //render
                     bindAddForm();
+                    bindUpdateForm();
                     myAjax(url,"GET",null,(data)=>{
                         model=data;
                         //console.log(data);
@@ -172,10 +177,12 @@
                 	$("#updateForm>form>input[name=bookId]").val(item.bookId);
                 	$("#updateForm>form>input[name=bookName]").val(item.bookName);
                 	$("#updateForm>form>input[name=bookAuthor]").val(item.bookAuthor);
+                	model.pop(item);
+                	this.render();
                 }
                 
                 this.update = function(book){
-                	model.pop(book);
+                	model.push(book);
                 	this.render();
                 }
                 

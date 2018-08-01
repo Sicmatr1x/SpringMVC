@@ -34,8 +34,11 @@ public class BookController {
 		return bookService.add(book);
 	}
 	
-	@PutMapping
-	public Book update(Book book) {
+	@PutMapping("/{bookId}")
+	public Book update(@PathVariable String bookId, Book book) {
+		if(book.getBookId() == null) {
+			book.setBookId(bookId);
+		}
 		System.out.println("BookController:update:book=" + book);
 		return bookService.update(book);
 	}
